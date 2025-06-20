@@ -7,10 +7,10 @@ from executor.indexes import IndexInspector
 
 def main():
     db = PostgresConector(
-        host="104.198.51.109",
-        dbname="erp",
-        user="erp_user",
-        password="DPkCerDe4<Q9OZmC",
+        host=,
+        dbname=,
+        user=,
+        password=,
         port=5432
     )
     db.conectar()
