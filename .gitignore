@@ -1,0 +1,5 @@
+# Pasta de assets
+assets/
+
+# Pastas de cache do Python
+__pycache__/
