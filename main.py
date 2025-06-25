@@ -8,10 +8,10 @@ from utils.csv_writer import salvar_csv
 
 def main():
     db = PostgresConector(
-        host="104.198.51.109",
+        host="",
         dbname="erp",
-        user="erp_user",
-        password="DPkCerDe4<Q9OZmC",
+        user="postgres",
+        password="",
         port=5432,
     )
     db.conectar()
