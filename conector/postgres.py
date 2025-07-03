@@ -9,7 +9,7 @@ class PostgresConector:
         self.port = port
         self.conn = None
 
-    def conectar(self):
+    def __enter__(self):
         try:
             self.conn = psycopg2.connect(
                 host=self.host,
@@ -18,18 +18,20 @@ class PostgresConector:
                 password=self.password,
                 port=self.port
             )
-            print("Conectado")
+            print(f"Conectado ao banco de dados {self.dbname} em {self.host}")
+            return self
         except psycopg2.Error as e:
-            print(f"erro ao conectar: {e}")
+            print(f"Erro ao conectar: {e}")
             self.conn = None
-    
+            raise
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.conn:
+            self.conn.close()
+            print(f"Conexão com {self.dbname} em {self.host} encerrada.")
+
     def get_cursor(self):
         if self.conn:
             return self.conn.cursor()
         else:
-            raise Exception("falha na conexão")
-
-    def fechar(self):
-        if self.conn:
-            self.conn.close()
-            print("Conexão encerrada.")
+            raise Exception("Falha na conexão: a conexão não está ativa.")

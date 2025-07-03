@@ -6,3 +6,6 @@ __pycache__/
 
 # pastas de ambientes virtuais
 venv/
+
+# Arquivo de variáveis de ambiente
+.env
