@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 from conector.postgres import PostgresConector
 from executor.schemas import SchemaFinder
 from executor.table_snapshot import TableSnapshot
+from executor.comparador import ComparadorPessoaPorCpf
+from utils.csv_writer import salvar_csv
 
 load_dotenv()
 
@@ -21,6 +23,17 @@ def processar_banco(db_config, env_name):
         snapshot = TableSnapshot(db, env_name)
         snapshot.capturar(schemas)
         snapshot.imprimir()
+
+def comparar_pessoas_por_cpf(db_dev_config, db_prod_config, schema):
+    with PostgresConector(**db_dev_config) as dbdev, PostgresConector(**db_prod_config) as dbprod:
+        comparador = ComparadorPessoaPorCpf(
+            db1=dbdev,
+            db2=dbprod,
+            schema=schema,
+            ignorar_colunas=["id", "criacao", "alteracao", "exclusao", "genero_id", "raca_id", "nascimento", "codigo_pessoa_wae",]
+        )
+        comparador.exibir_iguais()
+        comparador.exibir_diferencas()
 
 
 def main():
@@ -42,6 +55,7 @@ def main():
 
     processar_banco(db_dev_config, "dev")
     processar_banco(db_prod_config, "prod")
+    comparar_pessoas_por_cpf(db_dev_config, db_prod_config, schema="public")
 
 
 if __name__ == "__main__":
