@@ -1,6 +1,6 @@
-class SchemaFinder:
-    def __init__(self, connector):
-        self.cursor = connector.get_cursor()
+from .base_executor import BaseExecutor
+
+class SchemaFinder(BaseExecutor):
 
     def listar_schemas_validos(self):
         query = """

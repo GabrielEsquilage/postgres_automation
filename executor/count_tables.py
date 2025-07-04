@@ -1,9 +1,7 @@
 from psycopg2 import sql
+from .base_executor import BaseExecutor
 
-class TableCounter:
-    def __init__(self, connector):
-        self.connector = connector
-        self.cursor = connector.get_cursor()
+class TableCounter(BaseExecutor):
 
     def contar_registros(self, schema, tabela):
         try:

@@ -1,7 +1,7 @@
-class IndexInspector:
-    def __init__(self, connector):
-        self.cursor = connector.get_cursor()
+from .base_executor import BaseExecutor
+import re
 
+class IndexInspector(BaseExecutor):
     def listar_indices(self):
         query = """
             SELECT
@@ -30,11 +30,9 @@ class IndexInspector:
         return resultado
 
     def _extrair_tipo(self, definicao):
-        if "USING" in definicao:
-            return definicao.split("USING")[1].split()[0].strip()
-        return "desconhecido"
+        match = re.search(r"USING (\w+)", definicao)
+        return match.group(1) if match else "desconhecido"
 
     def _extrair_colunas(self, definicao):
-        if "(" in definicao and ")" in definicao:
-            return definicao.split("(")[-1].split(")")[0].strip()
-        return ""
+        match = re.search(r"\((.*)\)", definicao)
+        return match.group(1).strip() if match else ""
